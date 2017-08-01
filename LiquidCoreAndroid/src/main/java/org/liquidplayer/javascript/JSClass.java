@@ -7,6 +7,14 @@ public abstract class JSClass<TInstance extends JSInstance> extends JSFunction {
         context = jsContext;
         subclass = klass;
         invokeObject = this;
+        String name = ("constructor"==null) ? "__nullFunc" : "constructor";
+        Method [] methods = this.invokeObject.getClass().getMethods();
+        for (Method method : methods) {
+            if (method.getName().equals(name)) {
+                this.method = method;
+                break;
+            }
+        }
         context.sync(new Runnable() {
             @Override
             public void run() {
@@ -23,8 +31,8 @@ public abstract class JSClass<TInstance extends JSInstance> extends JSFunction {
         context.zombies.add(this);
 
         JSObject protoObject = new JSObject(jsContext);
-        Method[] methods = proto.getDeclaredMethods();
-        for (Method m : methods) {
+        Method[] methodsProto = proto.getDeclaredMethods();
+        for (Method m : methodsProto) {
             JSFunction f = new JSFunction(context, m, proto);
             protoObject.property(m.getName(), f);
         }
