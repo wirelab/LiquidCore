@@ -3,8 +3,10 @@ package org.liquidplayer.javascript;
 import java.lang.reflect.Method;
 
 public abstract class JSClass<TInstance extends JSInstance> extends JSFunction {
-    public JSClass(JSContext jsContext, final Class<?> klass, Class<TInstance> proto) {
+    public JSClass(JSContext jsContext, final Class<? extends JSObject> klass, Class<TInstance> proto) {
         context = jsContext;
+        subclass = klass;
+        invokeObject = this;
         context.sync(new Runnable() {
             @Override
             public void run() {

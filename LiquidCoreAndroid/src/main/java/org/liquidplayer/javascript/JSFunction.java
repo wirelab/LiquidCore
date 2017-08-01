@@ -608,7 +608,7 @@ public class JSFunction extends JSObject {
         }
     }
 
-    private Class<? extends JSObject> subclass = null;
+    protected Class<? extends JSObject> subclass = null;
 
     /**
      * Called only by convenience subclasses.  If you use
@@ -619,7 +619,7 @@ public class JSFunction extends JSObject {
     }
 
     protected Method method = null;
-    private JSObject invokeObject = null;
+    protected JSObject invokeObject = null;
 
     protected native long makeFunctionWithCallback(long ctx, String name);
 
