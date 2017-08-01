@@ -59,6 +59,16 @@ NATIVE(JSFunction,jlong,makeFunctionWithCallback) (PARAMS, jlong ctx, jstring na
     return reinterpret_cast<long>(static_cast<JSValue<Value>*>(function));
 }
 
+NATIVE(JSClass,jlong,makeFunctionWithCallback) (PARAMS, jlong ctx, jstring name) {
+    JSFunction<Value> *function = new JSFunction<Value>(env, thiz, ctx, name);
+    return reinterpret_cast<long>(static_cast<JSValue<Value>*>(function));
+}
+
+NATIVE(JSMethod,jlong,makeFunctionWithCallback) (PARAMS, jlong ctx, jstring name) {
+    JSFunction<Value> *function = new JSFunction<Value>(env, thiz, ctx, name);
+    return reinterpret_cast<long>(static_cast<JSValue<Value>*>(function));
+}
+
 NATIVE(JSObject,jobject,makeArray) (PARAMS, jlong ctx, jlongArray args) {
 
     jclass ret = env->FindClass("org/liquidplayer/javascript/JSValue$JNIReturnObject");
