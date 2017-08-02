@@ -10,5 +10,6 @@ public class JSInstance extends JSObject {
         valueRef = value.valueRef;
 
         context.persistObject(this);
+        context.zombies.add(this);
     }
 }
