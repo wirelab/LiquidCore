@@ -1,5 +1,7 @@
 package org.liquidplayer.javascript;
 
+import android.util.Log;
+
 import junit.framework.Assert;
 
 import static org.junit.Assert.assertFalse;
@@ -35,17 +37,49 @@ public class JSClassTest {
         }
     }
 
+    public class OtherObj extends JSObject {
+        public OtherObj(JSContext jsContext) {
+            super(jsContext, OtherObj.class);
+        }
+
+        public void doThings() {
+            Log.e("OtherObj", "Dothings");
+        }
+    }
+
     @org.junit.Test
     public void testJSClass() {
         JSContext jsContext = new JSContext();
         TestObjClass klass = new TestObjClass(jsContext);
         jsContext.property("TestObj", klass);
+        jsContext.property("otherObj", new OtherObj(jsContext));
 
         jsContext.evaluateScript("var testObj = TestObj.create();");
-        TestObj testObj = (TestObj)jsContext.evaluateScript("testObj").toObject();
+        TestObj testObj = (TestObj) jsContext.evaluateScript("testObj").toObject();
 
         assertFalse(testObj.called);
         jsContext.evaluateScript("testObj.doThings()");
         assertTrue(testObj.called);
+    }
+
+    @org.junit.Test
+    public void testJSMethodInvokeCrash() {
+        JSContext jsContext = new JSContext();
+        TestObjClass klass = new TestObjClass(jsContext);
+        jsContext.property("TestObj", klass);
+        jsContext.property("otherObj", new OtherObj(jsContext));
+
+        jsContext.evaluateScript("var testObj = TestObj.create();");
+
+        try {
+            while (true) {
+                jsContext.evaluateScript("testObj.doThings()");
+
+                Thread.sleep(33);
+
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

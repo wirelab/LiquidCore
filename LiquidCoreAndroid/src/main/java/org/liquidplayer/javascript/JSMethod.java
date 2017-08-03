@@ -1,5 +1,7 @@
 package org.liquidplayer.javascript;
 
+import android.util.Log;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -47,6 +49,10 @@ public class JSMethod extends JSObject {
     }
 
     protected JSValue function(JSObject thiz, JSValue [] args) {
+        Class<?> declaringClass = method.getDeclaringClass();
+        if(declaringClass.isInstance(thiz) == false) {
+            return null;
+        }
         Class<?>[] pType  = method.getParameterTypes();
         Object [] passArgs = new Object[pType.length];
         for (int i=0; i<passArgs.length; i++) {
